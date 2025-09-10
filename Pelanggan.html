@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pesan Pemasangan MyRepublic</title>
+  <style>
+    body{
+      margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background:#0b1220; font-family:Arial, sans-serif; color:#e6eef8;
+    }
+    .card{
+      width:90%; max-width:520px; background:#142036; border-radius:12px; padding:20px;
+      box-shadow:0 8px 25px rgba(0,0,0,0.6);
+    }
+    h1{ font-size:18px; margin-bottom:10px; }
+    label{ font-size:14px; color:#cbd5e1; display:block; margin:8px 0 4px; }
+    input, textarea{
+      width:100%; border-radius:8px; padding:10px; margin-bottom:12px;
+      background:#0a1527; color:#e6eef8; border:1px solid rgba(255,255,255,0.1);
+      font-size:15px;
+    }
+    .row{
+      display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;
+    }
+    button{
+      flex:1; min-width:120px; padding:10px; border-radius:8px; border:0; cursor:pointer;
+      font-weight:bold; font-size:14px;
+    }
+    button.copy{ background:transparent; color:#fbbf24; border:1px solid #fbbf24; }
+    button.wa{ background:linear-gradient(90deg,#10b981,#059669); color:white; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Pesan Pemasangan — MyRepublic</h1>
+
+    <label for="nomor">Nomor WhatsApp Tujuan</label>
+    <input type="text" id="nomor" placeholder="contoh: 6281234567890 (tanpa +/0)" />
+
+    <label for="pesan">Pesan</label>
+    <textarea id="pesan">
+---
+Permisi Buk/Bapak 🙏
+Saya dari teknisi *MyRepublic*.
+
+--------
+Apakah bisa dilakukan pemasangan hari ini Buk/Bapak?
+
+----
+Terima kasih 😊
+    </textarea>
+
+    <div class="row">
+      <button class="copy" id="btnCopy">📋 Salin Pesan</button>
+      <button class="wa" id="btnWA">💬 Kirim WhatsApp</button>
+    </div>
+  </div>
+
+  <script>
+    const txt = document.getElementById('pesan');
+    const nomorInput = document.getElementById('nomor');
+    const btnCopy = document.getElementById('btnCopy');
+    const btnWA = document.getElementById('btnWA');
+
+    btnCopy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(txt.value.trim());
+        btnCopy.textContent = '✅ Tersalin';
+        setTimeout(()=> btnCopy.textContent = '📋 Salin Pesan', 1500);
+      } catch (e) {
+        alert('Gagal menyalin. Silakan blok teks dan salin manual.');
+      }
+    });
+
+    btnWA.addEventListener('click', () => {
+      const nomor = nomorInput.value.trim();
+      if(!nomor){
+        alert('Isi nomor tujuan WhatsApp terlebih dahulu (contoh: 6281234567890).');
+        nomorInput.focus();
+        return;
+      }
+      const pesan = encodeURIComponent(txt.value.trim());
+      const url = `https://wa.me/${nomor}?text=${pesan}`;
+      location.href = url; // ✅ lebih aman di APK
+    });
+  </script>
+</body>
+</html>
